@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/card"
+        android:icon="@drawable/com_icon"
+        android:title="Virtual Card"/>
+
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/com_icon"
+        android:title="Profile"/>
+
+    <item
+        android:id="@+id/notification"
+        android:icon="@drawable/com_icon"
+        android:title="Notification"/>
+
+</menu>

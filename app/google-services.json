@@ -1,0 +1,114 @@
+{
+  "project_info": {
+    "project_number": "560820244354",
+    "firebase_url": "https://attendance-system-905aa.firebaseio.com",
+    "project_id": "attendance-system-905aa",
+    "storage_bucket": "attendance-system-905aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560820244354:android:5ebd6cdd1e02c658fe099b",
+        "android_client_info": {
+          "package_name": "msr.attend.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "560820244354-19u4pp9sqvpqn2mv1bu5qbuu1v0snen7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "msr.attend.admin",
+            "certificate_hash": "24ae1370648d8a1468b98fbdbff4ce98e9073d24"
+          }
+        },
+        {
+          "client_id": "560820244354-rudkil017hosmq6sd04d1jombd73qjvh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDruKV2gjcth_U0dPTE7laijbwP2pbJzsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "560820244354-rudkil017hosmq6sd04d1jombd73qjvh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560820244354:android:f1d72846f086d060fe099b",
+        "android_client_info": {
+          "package_name": "msr.attend.student"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "560820244354-rudkil017hosmq6sd04d1jombd73qjvh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDruKV2gjcth_U0dPTE7laijbwP2pbJzsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "560820244354-rudkil017hosmq6sd04d1jombd73qjvh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560820244354:android:0f74d842d17ffaa2fe099b",
+        "android_client_info": {
+          "package_name": "msr.attend.teacher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "560820244354-j64puqdlnrnfhs9r1o6vbtuij0r1rma9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "msr.attend.teacher",
+            "certificate_hash": "24ae1370648d8a1468b98fbdbff4ce98e9073d24"
+          }
+        },
+        {
+          "client_id": "560820244354-rudkil017hosmq6sd04d1jombd73qjvh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDruKV2gjcth_U0dPTE7laijbwP2pbJzsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "560820244354-rudkil017hosmq6sd04d1jombd73qjvh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
