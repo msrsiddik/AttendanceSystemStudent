@@ -1,4 +1,4 @@
-package msr.attend.student;
+        package msr.attend.student;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
