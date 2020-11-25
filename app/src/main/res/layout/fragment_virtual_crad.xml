@@ -40,4 +40,11 @@
         android:textAlignment="center"
         android:textSize="22sp"/>
 
+    <TextView
+        android:id="@+id/studentCurrentStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="22sp"/>
+
 </LinearLayout>

@@ -26,7 +26,7 @@ import msr.attend.student.model.Utils;
 public class VirtualCrad extends Fragment {
     private UserPreference preference;
     private ImageView qrCodeView;
-    private TextView studentName, studentBatch, studentDepartName;
+    private TextView studentName, studentBatch, studentDepartName, studentCurrentStatus;
     public VirtualCrad() {
         // Required empty public constructor
     }
@@ -44,6 +44,7 @@ public class VirtualCrad extends Fragment {
         studentName = view.findViewById(R.id.studentName);
         studentBatch = view.findViewById(R.id.studentBatch);
         studentDepartName = view.findViewById(R.id.studentDepartName);
+        studentCurrentStatus = view.findViewById(R.id.studentCurrentStatus);
         preference = new UserPreference(getContext());
 
         String id = preference.getStudentIdPref();
@@ -60,6 +61,18 @@ public class VirtualCrad extends Fragment {
                 }
             });
         }
+
+        Thread thread = new Thread(() -> {
+            while (true) {
+                new FirebaseDatabaseHelper().getStatusInOut(id, s -> studentCurrentStatus.setText(s));
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
 
     }
 
