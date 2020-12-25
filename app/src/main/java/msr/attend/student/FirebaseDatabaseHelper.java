@@ -1,7 +1,14 @@
 package msr.attend.student;
 
-import androidx.annotation.NonNull;
+import android.content.Context;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -10,25 +17,99 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import msr.attend.student.model.NoticeModel;
 import msr.attend.student.model.StudentModel;
 
 public class FirebaseDatabaseHelper {
     private FirebaseDatabase database;
     private DatabaseReference studentRef;
     private DatabaseReference currentStatus;
+    private DatabaseReference notification;
 
     public FirebaseDatabaseHelper() {
         database = FirebaseDatabase.getInstance();
         studentRef = database.getReference("Students");
         currentStatus = database.getReference("AttendInfoInUniversity");
+        notification = database.getReference().child("Notification");
+
     }
 
     public interface StudentData{
         void verifyStudent(StudentModel studentModel);
         void loginFailed();
+    }
+
+    public interface NoticeDataShot{
+        void noticeListener(List<NoticeModel> noticeModelList);
+    }
+
+    public void setNotificationToken(String token, String batch, String studentId){
+        notification.child("Tokens").child(batch).child(studentId).setValue(token);
+    }
+
+    public void getNotice(String batch, final NoticeDataShot dataShot, Context context){
+
+        notification.child("-MNCOxP1Eh-bpqGpA0IR").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"n")
+                        .setContentTitle("title")
+                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setAutoCancel(true)
+                        .setContentText("body");
+
+                NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
+                managerCompat.notify(999,builder.build());
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        notification.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<NoticeModel> noticeModels = new ArrayList<>();
+                for (DataSnapshot d : snapshot.getChildren()){
+                    for (DataSnapshot tId : d.getChildren()){
+                        NoticeModel model = tId.getValue(NoticeModel.class);
+                        if (model.getBatch().equals(batch)) {
+                            noticeModels.add(model);
+                            Log.e("Notice",model.getNoticeBody());
+                        }
+                    }
+                }
+
+                dataShot.noticeListener(noticeModels);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void loginStudentByCardScan(String id, final StudentData data){

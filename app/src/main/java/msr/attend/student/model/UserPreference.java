@@ -21,6 +21,15 @@ public class UserPreference {
         return sharedPreferences.getString("id","");
     }
 
+    public void setBatchPref(String batch){
+        editor.putString("batch",batch);
+        editor.commit();
+    }
+
+    public String getBatchPref(){
+        return sharedPreferences.getString("batch","");
+    }
+
     public void setLoginStatus(boolean loginStatus){
         editor.putBoolean("status", loginStatus);
         editor.commit();

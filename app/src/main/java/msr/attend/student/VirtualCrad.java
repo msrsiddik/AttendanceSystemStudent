@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
@@ -74,6 +75,12 @@ public class VirtualCrad extends Fragment {
         });
         thread.start();
 
+        updateToken();
+    }
+
+    private void updateToken(){
+        String refreshToken= FirebaseInstanceId.getInstance().getToken();
+        new FirebaseDatabaseHelper().setNotificationToken(refreshToken, preference.getBatchPref(),preference.getStudentIdPref());
     }
 
     private void setUpProfile(StudentModel studentModel) {
