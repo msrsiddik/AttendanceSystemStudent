@@ -6,8 +6,6 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import msr.attend.student.FirebaseDatabaseHelper;
 import msr.attend.student.model.UserPreference;
 
-import static msr.attend.student.MainActivity.USERID;
-
 public class MyFirebaseIdService extends FirebaseMessagingService {
     private UserPreference preference;
     @Override

@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -30,8 +31,6 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
     private UserPreference preference;
     private FragmentManager fragmentManager;
 
-    public static String USERID = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,14 +42,33 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
         navigation.setOnNavigationItemSelectedListener(this);
 
         if (preference.getLoginStatus()){
-            USERID = preference.getStudentIdPref();
             loadFragment(new VirtualCrad());
         } else {
             loadFragment(new Login());
+            navigation.setVisibility(View.INVISIBLE);
+            preLoginApp();
         }
+
+        onNewIntent(getIntent());
 
     }
 
+    private void preLoginApp(){
+        preference.setStudentIdPref("-MNCM6SdSm3lpvag3bww");
+        preference.setBatchPref("43");
+        preference.setLoginStatus(true);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Bundle extras = intent.getExtras();
+        if(extras != null) {
+            if (extras.containsKey("notice")) {
+                loadFragment(new UserNotification());
+            }
+        }
+    }
 
     @Override
     public void openScanner() {
