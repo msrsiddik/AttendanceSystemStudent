@@ -1,18 +1,12 @@
 package msr.attend.student;
 
-import android.content.Context;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
@@ -28,6 +22,7 @@ import java.util.Set;
 import msr.attend.student.model.ClassModel;
 import msr.attend.student.model.NoticeModel;
 import msr.attend.student.model.StudentModel;
+import msr.attend.student.model.TeacherModel;
 
 public class FirebaseDatabaseHelper {
     private FirebaseDatabase database;
@@ -35,6 +30,7 @@ public class FirebaseDatabaseHelper {
     private DatabaseReference currentStatus;
     private DatabaseReference notification;
     private DatabaseReference classInfoRef;
+    private DatabaseReference teacherProfile;
 
     public FirebaseDatabaseHelper() {
         database = FirebaseDatabase.getInstance();
@@ -42,7 +38,32 @@ public class FirebaseDatabaseHelper {
         currentStatus = database.getReference("AttendInfoInUniversity");
         notification = database.getReference().child("Notification");
         classInfoRef = database.getReference().child("ClassInformation");
+        teacherProfile = database.getReference("Teachers");
 
+    }
+
+    public interface TeacherDataShot{
+        void teacherProfileListener(TeacherModel teacherModel);
+    }
+
+    public void getTeacherProfile(String teacherId, final TeacherDataShot dataShot){
+        Query query = teacherProfile.orderByChild("id").equalTo(teacherId);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    TeacherModel model = dataSnapshot.getValue(TeacherModel.class);
+                    if (model.getId().equals(teacherId)){
+                        dataShot.teacherProfileListener(model);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public interface NoticeDataShot{
@@ -73,18 +94,20 @@ public class FirebaseDatabaseHelper {
         });
     }
 
-    public interface ClassTeacher{
-        void classModelListener(Set<ClassModel> models);
+    public interface ClassModelDataShot {
+        void classModelListener(List<ClassModel> models);
     }
 
-    public void classTeacher(String batch, final ClassTeacher classTeacher){
-        classInfoRef.orderByChild("batch").equalTo(batch).addValueEventListener(new ValueEventListener() {
+    public void classModelByBatch(String batch, final ClassModelDataShot classTeacher){
+        classInfoRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Set<ClassModel> classModels = new HashSet<>();
+                List<ClassModel> classModels = new ArrayList<>();
                 for (DataSnapshot ds : snapshot.getChildren()){
                     ClassModel model = ds.getValue(ClassModel.class);
-                    classModels.add(model);
+                    if (model.getBatch().equals(batch)){
+                        classModels.add(model);
+                    }
                 }
                 classTeacher.classModelListener(classModels);
             }

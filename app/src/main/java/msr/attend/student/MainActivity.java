@@ -30,6 +30,7 @@ import msr.attend.student.model.UserPreference;
 public class MainActivity extends AppCompatActivity implements FragmentInterface, BottomNavigationView.OnNavigationItemSelectedListener {
     private UserPreference preference;
     private FragmentManager fragmentManager;
+    private BottomNavigationView navigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
         fragmentManager = getSupportFragmentManager();
         preference = new UserPreference(this);
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
 
         if (preference.getLoginStatus()){
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
         } else {
             loadFragment(new Login());
             navigation.setVisibility(View.INVISIBLE);
-            preLoginApp();
+//            preLoginApp();
         }
 
         onNewIntent(getIntent());
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
     }
 
     private void preLoginApp(){
-        preference.setStudentIdPref("-MNCM6SdSm3lpvag3bww");
+        preference.setStudentIdPref("-MNCKtReQEod6aCbe-P-");
         preference.setBatchPref("43");
         preference.setLoginStatus(true);
     }
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
                     preference.setStudentIdPref(studentModel.getId());
                     preference.setBatchPref(studentModel.getBatch());
                     fragmentManager.beginTransaction().replace(R.id.FragmentContainer, new VirtualCrad()).commit();
+                    navigation.setVisibility(View.VISIBLE);
                     preference.setLoginStatus(true);
                 }
 
@@ -124,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
                 break;
 
             case R.id.profile:
-                Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
+                fragment = new Profile();
                 break;
 
             case R.id.notification:
