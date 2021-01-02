@@ -98,7 +98,7 @@ public class FirebaseDatabaseHelper {
         void classModelListener(List<ClassModel> models);
     }
 
-    public void classModelByBatch(String batch, final ClassModelDataShot classTeacher){
+    public void classModelByBatch(String batch, final ClassModelDataShot classModelShot){
         classInfoRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -109,7 +109,7 @@ public class FirebaseDatabaseHelper {
                         classModels.add(model);
                     }
                 }
-                classTeacher.classModelListener(classModels);
+                classModelShot.classModelListener(classModels);
             }
 
             @Override
