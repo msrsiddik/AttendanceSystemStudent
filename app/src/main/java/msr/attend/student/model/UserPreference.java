@@ -43,4 +43,5 @@ public class UserPreference {
         editor.clear();
         editor.commit();
     }
+
 }
