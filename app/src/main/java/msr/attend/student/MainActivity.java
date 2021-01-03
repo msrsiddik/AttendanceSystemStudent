@@ -74,6 +74,9 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
     @Override
     public void openScanner() {
         IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
+        integrator.setPrompt("DIU Student Id QR Scanner");
+        integrator.setOrientationLocked(false);
+        integrator.setBeepEnabled(true);
         integrator.initiateScan();
     }
 

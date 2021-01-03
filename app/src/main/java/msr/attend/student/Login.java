@@ -1,6 +1,5 @@
 package msr.attend.student;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,10 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 public class Login extends Fragment {
     private FragmentInterface fragmentInterface;
@@ -36,6 +31,8 @@ public class Login extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         scanner = view.findViewById(R.id.scannerBtn);
         test = view.findViewById(R.id.test);
+
+        getActivity().setTitle("Student Login");
 
         fragmentInterface = (FragmentInterface) getActivity();
 

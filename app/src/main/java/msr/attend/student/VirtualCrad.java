@@ -55,6 +55,8 @@ public class VirtualCrad extends Fragment {
         studentCurrentStatus = view.findViewById(R.id.studentCurrentStatus);
         preference = new UserPreference(getContext());
 
+        getActivity().setTitle("DIU Student Virtual Card");
+
         Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
 
 

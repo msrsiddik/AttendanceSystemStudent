@@ -1,5 +1,6 @@
 package msr.attend.student;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -10,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,6 +29,7 @@ public class UserNotification extends Fragment {
     private UserPreference preference;
     private ListView noticeList;
     private FirebaseDatabaseHelper firebaseDatabaseHelper;
+    private List<NoticeModel> noticeModelList;
 
     public UserNotification() {
         // Required empty public constructor
@@ -43,10 +47,32 @@ public class UserNotification extends Fragment {
         preference = new UserPreference(getContext());
         noticeList = view.findViewById(R.id.noticeList);
 
+        getActivity().setTitle("Notice Board");
+
         firebaseDatabaseHelper = new FirebaseDatabaseHelper();
         firebaseDatabaseHelper.getNotice(preference.getBatchPref(), noticeModels -> {
             if (getActivity() != null && noticeModels.size() > 0){
+                this.noticeModelList = noticeModels;
                 noticeList.setAdapter(new NoticeAdapter(getContext(), noticeModels));
+            }
+        });
+
+        noticeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Dialog dialog = new Dialog(getContext());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.notice_view);
+
+                TextView title, body;
+                title = dialog.findViewById(R.id.title);
+                body = dialog.findViewById(R.id.body);
+
+                NoticeModel model = noticeModelList.get(position);
+                title.setText(model.getNoticeTitle());
+                body.setText(model.getNoticeBody());
+
+                dialog.show();
             }
         });
     }

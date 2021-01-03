@@ -66,6 +66,8 @@ public class Profile extends Fragment {
         guardianMobileNo = view.findViewById(R.id.guardianMobileNo);
         exListView = view.findViewById(R.id.exListView);
 
+        getActivity().setTitle("Profile");
+
         preference = new UserPreference(getContext());
         firebaseDatabaseHelper = new FirebaseDatabaseHelper();
 
