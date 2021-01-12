@@ -16,4 +16,9 @@
         android:icon="@drawable/com_icon"
         android:title="Notification"/>
 
+    <item
+        android:id="@+id/messenger"
+        android:icon="@drawable/messenger"
+        android:title="Messenger"/>
+
 </menu>

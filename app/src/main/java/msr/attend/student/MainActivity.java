@@ -23,6 +23,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.util.List;
 
+import msr.attend.student.Messenger.MessengerActivity;
 import msr.attend.student.model.NoticeModel;
 import msr.attend.student.model.StudentModel;
 import msr.attend.student.model.UserPreference;
@@ -134,6 +135,11 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
 
             case R.id.notification:
                 fragment = new UserNotification();
+                break;
+
+            case R.id.messenger:
+                Intent intent = new Intent(this, MessengerActivity.class);
+                startActivity(intent);
                 break;
         }
         return loadFragment(fragment);

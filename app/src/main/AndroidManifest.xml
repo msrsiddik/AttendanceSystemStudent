@@ -16,6 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Student">
+
+        <activity android:name=".Messenger.MessengerActivity"></activity>
+        <activity android:name=".Messenger.MessageActivity"></activity>
+
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
