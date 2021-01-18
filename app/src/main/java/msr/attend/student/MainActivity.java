@@ -23,6 +23,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.util.List;
 
+import msr.attend.student.Messenger.MessageActivity;
 import msr.attend.student.Messenger.MessengerActivity;
 import msr.attend.student.model.NoticeModel;
 import msr.attend.student.model.StudentModel;
@@ -68,6 +69,9 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
         if(extras != null) {
             if (extras.containsKey("notice")) {
                 loadFragment(new UserNotification());
+            } else if (extras.containsKey("message")){
+                Intent i = new Intent(this, MessengerActivity.class);
+                this.startActivity(i);
             }
         }
     }
@@ -92,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
                 public void verifyStudent(StudentModel studentModel) {
                     preference.setStudentIdPref(studentModel.getId());
                     preference.setBatchPref(studentModel.getBatch());
+                    preference.setUserName(studentModel.getName());
                     fragmentManager.beginTransaction().replace(R.id.FragmentContainer, new VirtualCrad()).commit();
                     navigation.setVisibility(View.VISIBLE);
                     preference.setLoginStatus(true);

@@ -1,6 +1,8 @@
 package msr.attend.student;
 
+import android.content.Context;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -21,10 +23,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import msr.attend.student.Notification.APIService;
+import msr.attend.student.Notification.Client;
+import msr.attend.student.Notification.Data;
+import msr.attend.student.Notification.MyResponse;
+import msr.attend.student.Notification.NotificationSender;
+import msr.attend.student.model.ClassAttendModel;
 import msr.attend.student.model.ClassModel;
 import msr.attend.student.model.NoticeModel;
 import msr.attend.student.model.StudentModel;
 import msr.attend.student.model.TeacherModel;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FirebaseDatabaseHelper {
     private FirebaseDatabase database;
@@ -33,6 +44,9 @@ public class FirebaseDatabaseHelper {
     private DatabaseReference notification;
     private DatabaseReference classInfoRef;
     private DatabaseReference teacherProfile;
+    private DatabaseReference classAttendInfo;
+
+    private APIService apiService;
 
     public FirebaseDatabaseHelper() {
         database = FirebaseDatabase.getInstance();
@@ -41,7 +55,41 @@ public class FirebaseDatabaseHelper {
         notification = database.getReference().child("Notification");
         classInfoRef = database.getReference().child("ClassInformation");
         teacherProfile = database.getReference("Teachers");
+        classAttendInfo = database.getReference().child("ClassAttendInfo");
 
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+
+    }
+
+    public interface AttendDataShort{
+        void classAttendListener(List<ClassAttendModel> attendList);
+    }
+
+    public void getAllAttendanceInfoByBatchAndSubjectCode(String batch, String subjectCode, final AttendDataShort dataShort) {
+        classAttendInfo.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<ClassAttendModel> list = new ArrayList<>();
+                for (DataSnapshot d : snapshot.getChildren()) {
+                    //date path
+                    for (DataSnapshot a : d.getChildren()) {
+                        //subject code path
+                        for (DataSnapshot b : a.getChildren()) {
+                            ClassAttendModel attendModel = b.getValue(ClassAttendModel.class);
+                            if (attendModel.getBatch().equals(batch) && attendModel.getSubjectCode().equals(subjectCode)) {
+                                list.add(attendModel);
+                            }
+                        }
+                    }
+                }
+                dataShort.classAttendListener(list);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public interface TeacherDataShot {
@@ -190,6 +238,40 @@ public class FirebaseDatabaseHelper {
 //            }
 //        });
 //    }
+
+    public void sendNotification(String teacherId, String senderName, Context context){
+        notification.child("TeachersToken").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot token : snapshot.getChildren()) {
+                    if (token.getKey().equals(teacherId)){
+                        Data data = new Data(senderName,"New Message");
+                        NotificationSender sender = new NotificationSender(data,token.getValue(String.class));
+                        apiService.sendNotifcation(sender).enqueue(new Callback<MyResponse>() {
+                            @Override
+                            public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                if (response.code() == 200){
+                                    if (response.body().success != 1){
+                                        Toast.makeText(context, "Does not use the Teacher app", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
     public void setNotificationToken(String token, String batch, String studentId) {
         notification.child("Tokens").child(batch).child(studentId).setValue(token);

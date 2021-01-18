@@ -39,9 +39,17 @@ public class UserPreference {
         return sharedPreferences.getBoolean("status", false);
     }
 
+    public void setUserName(String name) {
+        editor.putString("userName",name);
+        editor.commit();
+    }
+
+    public String getUserName(){
+        return sharedPreferences.getString("userName",null);
+    }
+
     public void clear(){
         editor.clear();
         editor.commit();
     }
-
 }

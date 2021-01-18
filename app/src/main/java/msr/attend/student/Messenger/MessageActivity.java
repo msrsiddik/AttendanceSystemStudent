@@ -1,5 +1,6 @@
 package msr.attend.student.Messenger;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import msr.attend.student.FirebaseDatabaseHelper;
 import msr.attend.student.Messenger.adapter.MessageAdapter;
 import msr.attend.student.Messenger.model.Chat;
 import msr.attend.student.Messenger.model.FireDatebase;
@@ -46,6 +48,9 @@ public class MessageActivity extends AppCompatActivity {
 
     boolean notify = false;
 
+    private FirebaseDatabaseHelper firebaseDatabaseHelper;
+    private String userName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +71,8 @@ public class MessageActivity extends AppCompatActivity {
         userid = intent.getStringExtra("userid");
 
         userPref = new UserPreference(this);
+        firebaseDatabaseHelper = new FirebaseDatabaseHelper();
+        this.userName = userPref.getUserName();
 
         recyclerView.setAdapter(messageAdapter);
 
@@ -73,7 +80,7 @@ public class MessageActivity extends AppCompatActivity {
             notify = true;
             String msg = text_send.getText().toString();
             if (!msg.equals("")){
-                sendMessage(userPref.getStudentIdPref(), userid, msg);
+                sendMessage(userPref.getStudentIdPref(), userid, msg, this);
             } else {
                 Toast.makeText(MessageActivity.this, "You can't send empty message", Toast.LENGTH_SHORT).show();
             }
@@ -107,7 +114,9 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 
-    private void sendMessage(String sender, final String receiver, String message){
+    private void sendMessage(String sender, final String receiver, String message, Context context){
+
+        String msgId = FireDatebase.getMessengerRef().push().getKey();
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", sender);
@@ -115,8 +124,10 @@ public class MessageActivity extends AppCompatActivity {
         hashMap.put("message", message);
         hashMap.put("dateLong", Calendar.getInstance().getTime().getTime());
         hashMap.put("isseen", false);
+        hashMap.put("msgId",msgId);
 
-        FireDatebase.getMessengerRef().child("Chats").push().setValue(hashMap);
+        FireDatebase.getMessengerRef().child("Chats").child(msgId).setValue(hashMap)
+                .addOnSuccessListener(aVoid -> firebaseDatabaseHelper.sendNotification(receiver,userName+"#", context));
 
         final DatabaseReference chatRef = FireDatebase.getMessengerRef().child("Chatlist")
                 .child(userPref.getStudentIdPref())

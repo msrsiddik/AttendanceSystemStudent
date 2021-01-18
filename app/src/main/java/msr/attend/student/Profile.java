@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import msr.attend.student.model.ClassAttendModel;
 import msr.attend.student.model.ClassModel;
 import msr.attend.student.model.StudentModel;
 import msr.attend.student.model.UserPreference;
@@ -79,6 +80,8 @@ public class Profile extends Fragment {
                 studentDepartName.setText(studentModel.getDepartment());
                 studentPhoneNumber.setText(studentModel.getStudentPhone());
                 guardianMobileNo.setText(studentModel.getGuardianPhone());
+
+
             }
 
             @Override
@@ -274,6 +277,19 @@ public class Profile extends Fragment {
             } else {
                 textView.setBackgroundColor(Color.WHITE);
             }
+
+            TextView classCountV = convertView.findViewById(R.id.classCountV);
+
+            firebaseDatabaseHelper.getAllAttendanceInfoByBatchAndSubjectCode(studentBatch.getText().toString(), child.getSubCode(), attendList -> {
+                int classCount = 0;
+                for (ClassAttendModel classAttendModel : attendList) {
+                    if (classAttendModel.getStuId().equals(preference.getStudentIdPref()) && classAttendModel.getPresent().equals("true")){
+                        ++classCount;
+                    }
+                }
+                classCountV.setText("Present : "+classCount);
+            });
+
             return convertView;
         }
 
