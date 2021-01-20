@@ -59,7 +59,6 @@ public class VirtualCrad extends Fragment {
 
         Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
 
-
         String id = preference.getStudentIdPref();
         if (!id.equals("")) {
             new FirebaseDatabaseHelper().loginStudentByCardScan(id, new FirebaseDatabaseHelper.StudentData() {
