@@ -78,7 +78,7 @@ public class VirtualCrad extends Fragment {
         Thread thread = new Thread(() -> {
             while (true) {
                 new FirebaseDatabaseHelper().getStatusInOut(id, s -> {
-                    studentCurrentStatus.setText(s);
+                    studentCurrentStatus.setText("Current Status : "+s);
                 });
                 try {
                     Thread.sleep(500);
@@ -124,8 +124,8 @@ public class VirtualCrad extends Fragment {
             final Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
             qrCodeView.setImageBitmap(bitmap);
             studentName.setText(studentModel.getName());
-            studentBatch.setText(studentModel.getBatch());
-            studentDepartName.setText(studentModel.getDepartment());
+            studentBatch.setText("Batch : "+studentModel.getBatch());
+            studentDepartName.setText("Department : "+studentModel.getDepartment());
         } catch (Exception e) {
             e.printStackTrace();
         }

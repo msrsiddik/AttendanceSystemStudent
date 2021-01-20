@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity implements FragmentInterface
     }
 
     private void preLoginApp(){
-        preference.setStudentIdPref("-MNCKtReQEod6aCbe-P-");
-        preference.setBatchPref("43");
+        preference.setStudentIdPref("-MRPExmK8mjlodCBUdap");
+        preference.setBatchPref("46");
         preference.setLoginStatus(true);
     }
 
